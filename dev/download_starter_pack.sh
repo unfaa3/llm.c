@@ -42,7 +42,7 @@ download_file() {
     fi
 
     # Download the file
-    curl -s -L -o "$FILE_PATH" "$FILE_URL"
+    wget -q --show-progress -O "$FILE_PATH" "$FILE_URL"
     echo "Downloaded $FILE_NAME to $FILE_PATH"
 }
 

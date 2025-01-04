@@ -11,7 +11,6 @@ We are accelerating Large Language Model (LLM) computation using NVIDIA Tensor C
 ### Member A: Background Research and Problem Analysis
 
 - **Tasks:**
-  - Study the existing codebase and documentation.
   - Research Tensor Core technology and mixed precision computation.
   - Identify performance bottlenecks using profiling tools (e.g., NVIDIA Nsight).
   - Write the **Introduction** and **References** sections of the report.
@@ -21,14 +20,12 @@ We are accelerating Large Language Model (LLM) computation using NVIDIA Tensor C
 - **Tasks:**
   - Design optimization strategies using cuBLAS or WMMA API.
   - Implement mixed precision computation in the code.
-  - Ensure code correctness and functionality.
   - Write the **Methodology** and **Implementation** sections of the report.
 
 ### Member C: Experimentation and Results Analysis
 
 - **Tasks:**
   - Set up the GPU environment and necessary software.
-  - Run experiments and collect performance data.
   - Analyze results and compare with the original implementation.
   - Write the **Experimental Setup**, **Results**, and **Discussion and Conclusion** sections of the report.
 
@@ -47,7 +44,6 @@ We are accelerating Large Language Model (LLM) computation using NVIDIA Tensor C
 ### 成员A：背景研究和问题分析
 
 - **任务：**
-  - 学习现有的代码库和文档。
   - 研究Tensor Core技术和混合精度计算。
   - 使用Profiling工具（如NVIDIA Nsight）识别性能瓶颈。
   - 撰写报告的**引言**和**参考文献**部分。
@@ -57,24 +53,24 @@ We are accelerating Large Language Model (LLM) computation using NVIDIA Tensor C
 - **任务：**
   - 设计使用cuBLAS或WMMA API的优化策略。
   - 在代码中实现混合精度计算。
-  - 确保代码的正确性和功能性。
   - 撰写报告的**方法**和**实现**部分。
 
 ### 成员C：实验与结果分析
 
 - **任务：**
   - 搭建GPU环境和必要的软件。
-  - 运行实验并收集性能数据。
   - 分析结果并与原始实现进行比较。
   - 撰写报告的**实验设置**、**结果**和**讨论与结论**部分。
 
 
 
-## quick start (1 GPU, fp32 only)
+## quick start (1 GPU, BF16 only)
 
 ```bash
 chmod u+x ./dev/download_starter_pack.sh
 ./dev/download_starter_pack.sh
-make train_gpt2fp32cu
-./train_gpt2fp32cu
+make train_gpt2cu PRECISION=BF16 NO_MULTI_GPU=1 NO_USE_MPI=1
+./train_gpt2cu -i dev/data/tinyshakespeare/tiny_shakespeare_train.bin \
+               -j dev/data/tinyshakespeare/tiny_shakespeare_val.bin \
+               -v 250 -s 250 -g 144 -f shakespeare.log -b 4
 ```

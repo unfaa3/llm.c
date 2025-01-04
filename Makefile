@@ -288,3 +288,12 @@ profile_gpt2cu: profile_gpt2.cu $(NVCC_CUDNN)
 clean:
 	$(REMOVE_FILES) $(TARGETS)
 	$(REMOVE_BUILD_OBJECT_FILES)
+
+# 添加 cuBLAS 相关标志
+NVCC_FLAGS += -DUSE_TENSOR_CORES
+NVCC_LDFLAGS += -lcublas -lcublasLt
+
+# 为 Tensor Core 添加计算能力要求
+ifneq ($(GPU_COMPUTE_CAPABILITY),)
+  NVCC_FLAGS += --generate-code arch=compute_$(GPU_COMPUTE_CAPABILITY),code=[compute_$(GPU_COMPUTE_CAPABILITY),sm_$(GPU_COMPUTE_CAPABILITY)]
+endif

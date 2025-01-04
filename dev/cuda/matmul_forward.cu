@@ -340,6 +340,44 @@ void matmul_forward(int kernel_num,
     }
 }
 
+// 使用 cuBLAS GEMM 进行矩阵乘法
+void matmul_forward_cublas(float* out,
+                          const float* inp, const float* weight, const float* bias,
+                          int B, int T, int C, int OC) {
+    cublasHandle_t handle = setup_cublas();
+    
+    // 设置矩阵参数
+    const float alpha = 1.0f;
+    const float beta = 0.0f;
+    
+    // 执行批量 GEMM
+    for (int b = 0; b < B; b++) {
+        for (int t = 0; t < T; t++) {
+            float* out_bt = out + b * T * OC + t * OC;
+            const float* inp_bt = inp + b * T * C + t * C;
+            
+            // 使用 cuBLAS GEMM
+            cublasSgemm(handle,
+                       CUBLAS_OP_N, CUBLAS_OP_N,  // 矩阵操作
+                       OC, 1, C,                   // m, n, k
+                       &alpha,                     // alpha
+                       weight, OC,                 // A matrix
+                       inp_bt, C,                  // B matrix  
+                       &beta,                      // beta
+                       out_bt, OC);               // C matrix
+                       
+            // 添加偏置
+            if (bias != NULL) {
+                for (int i = 0; i < OC; i++) {
+                    out_bt[i] += bias[i];
+                }
+            }
+        }
+    }
+    
+    cublasDestroy(handle);
+}
+
 // ----------------------------------------------------------------------------
 
 int main(int argc, char **argv) {

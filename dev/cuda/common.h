@@ -383,3 +383,20 @@ float benchmark_kernel(int repeats, Kernel kernel, KernelArgs&&... kernel_args) 
 
     return elapsed_time / repeats;
 }
+
+// 添加 cuBLAS 设置
+void setup_cublas() {
+    cublasHandle_t handle;
+    cublasCreate(&handle);
+    
+    // 启用 Tensor Core
+    cublasSetMathMode(handle, CUBLAS_TENSOR_OP_MATH);
+    
+    // 设置计算类型为 TF32 (如果支持)
+    if (cuda_arch_major >= 8) {
+        cublasMath_t math_mode = CUBLAS_TF32_TENSOR_OP_MATH;
+        cublasSetMathMode(handle, math_mode);
+    }
+    
+    return handle;
+}
