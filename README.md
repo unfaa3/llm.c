@@ -69,7 +69,7 @@ We are accelerating Large Language Model (LLM) computation using NVIDIA Tensor C
 ```bash
 chmod u+x ./dev/download_starter_pack.sh
 ./dev/download_starter_pack.sh
-make train_gpt2cu PRECISION=BF16 NO_MULTI_GPU=1 NO_USE_MPI=1
+make train_gpt2cu PRECISION=BF16 NO_MULTI_GPU=1
 ./train_gpt2cu -i dev/data/tinyshakespeare/tiny_shakespeare_train.bin \
                -j dev/data/tinyshakespeare/tiny_shakespeare_val.bin \
                -v 250 -s 250 -g 144 -f shakespeare.log -b 4
